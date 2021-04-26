@@ -1,5 +1,5 @@
 module.exports = {
-    roots: ['<rootDit>/src'],
+    roots: ['<rootDir>/src'],
     testEnvironment: 'node',
     transform: {
         '.+\\.ts$': 'ts-jest'
