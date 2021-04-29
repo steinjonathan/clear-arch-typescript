@@ -7,9 +7,9 @@ type SutTypes = {
     cacheStore: CacheStoreSpy
 }
 
-const makeSut = () : SutTypes => {
+const makeSut = (timestamp : Date = new Date()) : SutTypes => {
     const cacheStore = new CacheStoreSpy()
-    const sut = new LocalLoadPurchases(cacheStore)
+    const sut = new LocalLoadPurchases(cacheStore, timestamp)
     return {
         sut,
         cacheStore
