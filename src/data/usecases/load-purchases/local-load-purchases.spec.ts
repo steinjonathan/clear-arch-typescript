@@ -19,13 +19,13 @@ const makeSut = (timestamp : Date = new Date()) : SutTypes => {
 describe('LocalLoadPurchases', () => {
     test('Should not delete or insert cache on sut.init', () => {
         const { cacheStore } = makeSut()
-        expect(cacheStore.messages).toHaveLength(0)
+        expect(cacheStore.actions).toHaveLength(0)
     })
 
     test('Should call corrent key on load', async () => {
         const { sut, cacheStore } = makeSut()
         await sut.loadAll()
-        expect(cacheStore.messages).toEqual([CacheStoreSpy.Messages.fetch])
+        expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
         expect(cacheStore.fetchKey).toEqual('purchases')
     })
 })
