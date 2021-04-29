@@ -19,6 +19,11 @@ export class CacheStoreSpy implements CacheStore {
         this.actions.push(CacheStoreSpy.Action.insert)
     }
 
+    replace(key: string, value: any): void {
+        this.delete(key)
+        this.insert(key, value)
+    }
+
     fetch(key: string) : Promise<void> {
         this.fetchKey = key
         this.actions.push(CacheStoreSpy.Action.fetch)
