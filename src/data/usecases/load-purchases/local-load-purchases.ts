@@ -21,8 +21,8 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
 
     async loadAll () : Promise<Array<LoadPurchases.Result>> {
         try {
-            this.cacheStore.fetch(this.PURCHASES_KEY)
-            return []
+            const cache = this.cacheStore.fetch(this.PURCHASES_KEY)
+            return cache.value
         } catch (err) {
             this.cacheStore.delete(this.PURCHASES_KEY)
             return []

@@ -22,13 +22,6 @@ describe('LocalLoadPurchases', () => {
         expect(cacheStore.actions).toHaveLength(0)
     })
 
-    test('Should call corrent key on load', async () => {
-        const { sut, cacheStore } = makeSut()
-        await sut.loadAll()
-        expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
-        expect(cacheStore.fetchKey).toEqual('purchases')
-    })
-
     test('Should return empty list if load fails', async () => {
         const { sut, cacheStore } = makeSut()
         cacheStore.simulateFetchError()
@@ -36,5 +29,18 @@ describe('LocalLoadPurchases', () => {
         expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
         expect(cacheStore.deleteKey).toEqual('purchases')
         expect(purchases).toEqual([])
+    })
+
+    test('Should return a list of purchases if cache is less than 3 days old', async () => {
+        const timestamp = new Date()
+        const { sut, cacheStore } = makeSut(timestamp)
+        cacheStore.fetchResult = {
+            timestamp,
+            value: mockPurchases()
+        }
+        const purchases = await sut.loadAll()
+        expect(cacheStore.fetchKey).toEqual('purchases')
+        expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
+        expect(purchases).toEqual(cacheStore.fetchResult.value)
     })
 })
