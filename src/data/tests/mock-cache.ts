@@ -1,6 +1,12 @@
 import { LoadPurchases, SavePurchases } from "@/domain/usecases"
 import { CacheStore } from "@/data/protocols/cache"
 
+export const getCacheExpirationDate = (currentDate: Date) : Date => {
+    const macCacheAge = new Date(currentDate)
+    macCacheAge.setDate(macCacheAge.getDate() - 3)
+    return macCacheAge
+}
+
 export class CacheStoreSpy implements CacheStore {
     deleteKey: string
     insertKey: string
