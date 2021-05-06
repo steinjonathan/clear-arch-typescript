@@ -40,5 +40,31 @@ describe('LocalValidatePurchases', () => {
         expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
     })
 
+    test('Should delete cache if it is expired', () => {
+        const currentDate = new Date()
+        const timestamp = getCacheExpirationDate(currentDate)
+        timestamp.setSeconds(timestamp.getSeconds() - 1)
+        const { sut, cacheStore } = makeSut(currentDate)
+        cacheStore.fetchResult = {
+            timestamp
+        }
+        sut.validate()
+        expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
+        expect(cacheStore.fetchKey).toEqual('purchases')
+        expect(cacheStore.deleteKey).toEqual('purchases')
+    })
+
+    test('Should delete cache if it is on expiration date', async () => {
+        const currentDate = new Date()
+        const timestamp = getCacheExpirationDate(currentDate)
+        const { sut, cacheStore } = makeSut(currentDate)
+        cacheStore.fetchResult = {
+            timestamp
+        }
+        sut.validate()
+        expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
+        expect(cacheStore.fetchKey).toEqual('purchases')
+        expect(cacheStore.deleteKey).toEqual('purchases')
+    })
 
 })

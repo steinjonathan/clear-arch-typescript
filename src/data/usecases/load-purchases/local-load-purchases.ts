@@ -26,7 +26,7 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
                 return cache.value
             } else {
                 return []
-        }
+            }
         } catch (err) {
             return []
         }
@@ -34,7 +34,10 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
 
     validate () : void {
         try {
-            this.cacheStore.fetch(this.PURCHASES_KEY)
+            const cache = this.cacheStore.fetch(this.PURCHASES_KEY)
+            if (!CachePolicy.validate(cache.timestamp, this.currentDate)) {
+                throw new Error()
+            } 
         } catch (err) {
             this.cacheStore.delete(this.PURCHASES_KEY)
         }
