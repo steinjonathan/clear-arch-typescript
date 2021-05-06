@@ -40,4 +40,5 @@ describe('LocalValidatePurchases', () => {
         expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
     })
 
+
 })
