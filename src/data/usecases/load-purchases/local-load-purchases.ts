@@ -32,4 +32,12 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
             return []
         }
     }
+
+    validate () : void {
+        try {
+            this.cacheStore.fetch(this.PURCHASES_KEY)
+        } catch (err) {
+            this.cacheStore.delete(this.PURCHASES_KEY)
+        }
+    }
 }

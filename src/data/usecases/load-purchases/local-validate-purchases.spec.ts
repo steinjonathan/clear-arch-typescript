@@ -21,5 +21,23 @@ describe('LocalValidatePurchases', () => {
         expect(cacheStore.actions).toHaveLength(0)
     })
 
+    test('Should delete cache if load fails', () => {
+        const { sut, cacheStore } = makeSut()
+        cacheStore.simulateFetchError()
+        sut.validate()
+        expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch, CacheStoreSpy.Action.delete])
+        expect(cacheStore.deleteKey).toEqual('purchases')
+    })
+
+    test('Should hasnt side effect if load succeeds', async () => {
+        const currentDate = new Date()
+        const timestamp = getCacheExpirationDate(currentDate)
+        timestamp.setSeconds(timestamp.getSeconds() + 1)
+        const { sut, cacheStore } = makeSut(currentDate)
+        cacheStore.fetchResult = { timestamp }
+        sut.validate()
+        expect(cacheStore.fetchKey).toEqual('purchases')
+        expect(cacheStore.actions).toEqual([CacheStoreSpy.Action.fetch])
+    })
 
 })
